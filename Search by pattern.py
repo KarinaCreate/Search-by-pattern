@@ -1,19 +1,31 @@
 import numpy as np
 import cv2 as cv
+import cv2
+import requests
+from io import BytesIO
+from PIL import Image
+import matplotlib.pyplot as plt
+
+# Функция для загрузки изображения по URL
+def read_image_from_url(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    image = Image.open(BytesIO(response.content))
+    return cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
 
 # Функция для добавления черных полос снизу изображению с меньшей высотой
 def pad_images_to_same_height(img1, img2):
     h1, w1 = img1.shape[:2]
     h2, w2 = img2.shape[:2]
     if h1 < h2:
-        img1 = cv.copyMakeBorder(img1, 0, h2-h1, 0, 0, cv.BORDER_CONSTANT, value=(0, 0, 0))
+        img1 = cv2.copyMakeBorder(img1, 0, h2-h1, 0, 0, cv.BORDER_CONSTANT, value=(0, 0, 0))
     else:
-        img2 = cv.copyMakeBorder(img2, 0, h1-h2, 0, 0, cv.BORDER_CONSTANT, value=(0, 0, 0))
+        img2 = cv2.copyMakeBorder(img2, 0, h1-h2, 0, 0, cv.BORDER_CONSTANT, value=(0, 0, 0))
     return img1, img2
 
 # Функция для обнаружения ключевых точек и вычисления дескрипторов с использованием SIFT
 def detect_and_compute_sift(image, mask=None):
-    sift = cv.SIFT_create()
+    sift = cv2.SIFT_create()
     keypoints, descriptors = sift.detectAndCompute(image, mask)
     return keypoints, descriptors
 
@@ -42,8 +54,8 @@ def draw_detected_object(image, M, template_shape):
 # Основная функция для поиска объекта на изображении
 def predict_image(train_file, template_file):
     # Загрузка изображений
-    original_img = cv.imread(train_file)
-    template_img = cv.imread(template_file)
+    original_img = read_image_from_url(train_file)
+    template_img = read_image_from_url(template_file)
 
     # Преобразование в серое изображение
     img_gray = cv.cvtColor(original_img, cv.COLOR_BGR2GRAY)
@@ -78,10 +90,19 @@ def predict_image(train_file, template_file):
 
     # Добавление черных полос снизу изображению с меньшей высотой
     template_img, final_img = pad_images_to_same_height(template_img, img_with_object)
-    # Показ изображения
-    cv2_imshow(final_img)
-    cv.waitKey(0)
 
-train_file = '/content/gdrive/MyDrive/train/train_1.jpg'
-template_file = '/content/gdrive/MyDrive/template/template_1.jpg'
+    # Показ изображения
+    #cv.imshow("Detected Object", final_img)
+    #cv.waitKey(0)  # ждем нажатия клавиши
+    #cv.destroyAllWindows()  # закрываем окно
+
+    plt.figure(figsize=(12, 8))  # размер окна в дюймах
+    plt.imshow(cv.cvtColor(final_img, cv.COLOR_BGR2RGB))
+    plt.axis('off')
+    plt.show()
+
+# Простой вариант для одного набора изображений
+train_file = 'https://raw.githubusercontent.com/KarinaCreate/Search-by-pattern/8ae239181b7a92326f22365d481130d7f6a323bd/train/train_5.jpg'
+template_file = 'https://raw.githubusercontent.com/KarinaCreate/Search-by-pattern/8ae239181b7a92326f22365d481130d7f6a323bd/template/template_5.jpg'
+
 predict_image(train_file, template_file)
