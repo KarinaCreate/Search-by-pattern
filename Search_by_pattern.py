@@ -34,7 +34,7 @@ def detect_and_compute_sift(image, mask=None):
 
 
 # Функция для поиска совпадений
-def match_keypoints(des1, des2, ratio=0.75):
+def match_keypoints(des1, des2, ratio=0.55):
     bf = cv.BFMatcher(cv.NORM_L2)
     matches = bf.knnMatch(des1, des2, k=2)
     good_matches = [m for m, n in matches if m.distance < ratio * n.distance]
@@ -79,7 +79,7 @@ def predict_image(train_file, template_file):
         return None
 
     img_with_object = original_img.copy()
-    max_iterations = 15  # Ограничение количества итераций
+    max_iterations = 3  # Ограничение количества итераций
     iteration = 0
 
     while iteration < max_iterations:
@@ -128,9 +128,9 @@ def predict_image(train_file, template_file):
 
 
 # Тестирование
-train_file = 'https://raw.githubusercontent.com/KarinaCreate/Search-by-pattern/8ae239181b7a92326f22365d481130d7f6a323bd/train/train_7.jpg'
-template_file = 'https://raw.githubusercontent.com/KarinaCreate/Search-by-pattern/8ae239181b7a92326f22365d481130d7f6a323bd/template/template_7.jpg'
+train_file = 'https://raw.githubusercontent.com/KarinaCreate/Search-by-pattern/8ae239181b7a92326f22365d481130d7f6a323bd/train/train_3.jpg'
+template_file = 'https://raw.githubusercontent.com/KarinaCreate/Search-by-pattern/8ae239181b7a92326f22365d481130d7f6a323bd/template/template_3.jpg'
 
 result = predict_image(train_file, template_file)
 
-cv.imwrite('C:/Users/user/Desktop/Search by pattern/results/grapefruit_juice.jpg', result)
+cv.imwrite('C:/Users/user/Desktop/Search_by_pattern/results/multifruit_juice.jpg', result)
