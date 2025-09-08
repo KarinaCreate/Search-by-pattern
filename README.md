@@ -4,10 +4,11 @@
 ## Пример шаблона и полок с товарами
 Для работы были выбраны несколько товаров с разных полок для поиска.
 
+<b>Шаблон продукта</b><br>
+[<img src="template/template_6.jpg" width="90"/>](template/template_6.jpg)
 
-[<img src="template/template_6.jpg" alt="Шаблон для поиска" width="90"/>](template/template_6.jpg)
-<span style="font-size: 14px; color: #000;">Шаблон продукта</span>  [<img src="train/train_6.jpg" alt="Шаблон для поиска" width="700"/>](train/train_6.jpg)
-<span style="font-size: 14px; color: #000;">Полка с товарами</span>
+<b>Шаблон полки с товарами</b><br>
+[<img src="train/train_6.jpg" alt="Шаблон для поиска" width="700"/>](train/train_6.jpg)
 
 ## Пример поискового запроса
 [<img src="results/tomato_juice.jpg" alt="Шаблон для поиска" width="700"/>](results/tomato_juice.jpg)
